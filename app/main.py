@@ -9,12 +9,11 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
-# ✅ Final working dataset loading method using hf:// and Parquet
+# Load dataset
 df = pd.read_parquet(
     "hf://datasets/BrainGPT/BrainBench_GPT-4_v0.1.csv/data/train-00000-of-00001-1c06a67d80bbbd1d.parquet"
 )
 
-# In-memory session store (for demo)
 session_store = {}
 
 @app.get("/", response_class=HTMLResponse)
@@ -22,71 +21,52 @@ async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 @app.post("/start", response_class=HTMLResponse)
-async def start(request: Request, category: str = Form(...)):
-    filtered = df[df["journal_section"] == category]
+async def start(request: Request):
+    trial = df.sample(1).iloc[0]
+    show_original = random.choice([True, False])
+    abstract = trial["original_abstract"] if show_original else trial["incorrect_abstract"]
+    correct = "no" if show_original else "yes"
 
-    if len(filtered) < 2:
-        return templates.TemplateResponse("home.html", {
-            "request": request,
-            "error": f"Not enough abstracts in category '{category}'. Please choose another."
-        })
-
-    trials = random.sample(list(filtered.to_dict(orient="records")), 2)
-
-    session_trials = []
-    for trial in trials:
-        show_original = random.choice([True, False])
-        abstract_shown = trial["original_abstract"] if show_original else trial["incorrect_abstract"]
-        correct_answer = "no" if show_original else "yes"
-        session_trials.append({
-            "doi": trial["doi"],
-            "abstract": abstract_shown,
-            "correct": correct_answer
-        })
-
-    session_store["category"] = category
-    session_store["trial_index"] = 0
-    session_store["trials"] = session_trials
+    session_store["trial"] = {
+        "doi": trial["doi"],
+        "journal_section": trial["journal_section"],
+        "abstract": abstract,
+        "correct": correct
+    }
     session_store["results"] = []
 
     return RedirectResponse("/trial", status_code=302)
 
 @app.get("/trial", response_class=HTMLResponse)
 async def trial(request: Request):
-    idx = session_store.get("trial_index", 0)
-    total_trials = len(session_store.get("trials", []))
+    trial = session_store.get("trial", None)
+    if not trial:
+        return RedirectResponse("/", status_code=302)
 
-    if idx >= total_trials:
-        return RedirectResponse("/results", status_code=302)
-
-    trial = session_store["trials"][idx]
     return templates.TemplateResponse("trial.html", {
         "request": request,
-        "trial_num": idx + 1,
-        "abstract": trial["abstract"]
+        "abstract": trial["abstract"],
+        "journal_section": trial["journal_section"]
     })
 
 @app.post("/submit-trial", response_class=HTMLResponse)
 async def submit_trial(request: Request, altered: str = Form(...), confidence: int = Form(...)):
-    idx = session_store.get("trial_index", 0)
-    trial = session_store["trials"][idx]
+    trial = session_store.get("trial", None)
     correct = trial["correct"]
 
     session_store["results"].append({
-        "trial": idx + 1,
         "user_guess": altered,
         "confidence": confidence,
         "correct_answer": correct,
         "is_correct": altered == correct
     })
 
-    session_store["trial_index"] += 1
-    return RedirectResponse("/trial", status_code=302)
+    return RedirectResponse("/results", status_code=302)
 
 @app.get("/results", response_class=HTMLResponse)
 async def results(request: Request):
     return templates.TemplateResponse("results.html", {
         "request": request,
         "results": session_store["results"],
-        "category": session_store.get("category", "N/A")
+        "category": session_store["trial"]["journal_section"]
     })
