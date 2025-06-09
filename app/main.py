@@ -9,9 +9,10 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
-# Load and cache dataset at startup
-CSV_URL = "https://huggingface.co/datasets/BrainGPT/BrainBench_GPT-4_v0.1.csv"
-df = pd.read_csv(CSV_URL)
+# ✅ Final working dataset loading method using hf:// and Parquet
+df = pd.read_parquet(
+    "hf://datasets/BrainGPT/BrainBench_GPT-4_v0.1.csv/data/train-00000-of-00001-1c06a67d80bbbd1d.parquet"
+)
 
 # In-memory session store (for demo)
 session_store = {}
@@ -23,9 +24,15 @@ async def home(request: Request):
 @app.post("/start", response_class=HTMLResponse)
 async def start(request: Request, category: str = Form(...)):
     filtered = df[df["journal_section"] == category]
-    trials = random.sample(list(filtered.to_dict(orient="records")), 3)
 
-    # Choose random version and set correct answer
+    if len(filtered) < 2:
+        return templates.TemplateResponse("home.html", {
+            "request": request,
+            "error": f"Not enough abstracts in category '{category}'. Please choose another."
+        })
+
+    trials = random.sample(list(filtered.to_dict(orient="records")), 2)
+
     session_trials = []
     for trial in trials:
         show_original = random.choice([True, False])
@@ -47,7 +54,9 @@ async def start(request: Request, category: str = Form(...)):
 @app.get("/trial", response_class=HTMLResponse)
 async def trial(request: Request):
     idx = session_store.get("trial_index", 0)
-    if idx >= 3:
+    total_trials = len(session_store.get("trials", []))
+
+    if idx >= total_trials:
         return RedirectResponse("/results", status_code=302)
 
     trial = session_store["trials"][idx]
