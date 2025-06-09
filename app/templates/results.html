@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Results</title></head>
+<body>
+    <h2>Results - Category: {{ category }}</h2>
+    <ul>
+        {% for result in results %}
+            <li>Trial {{ result.trial }}: You said "{{ result.user_guess }}" with confidence {{ result.confidence }} — Correct: {{ result.correct_answer }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Try Again</a>
+</body>
+</html>

@@ -7,15 +7,49 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
+# In-memory session tracking (for dev/demo only)
+session_store = {}
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("home.html", {"request": request})
 
-@app.post("/submit", response_class=HTMLResponse)
-async def submit(
-    request: Request,
-    selected: str = Form(...),
-    confidence: int = Form(...)
-):
-    # Placeholder for logic to store results and call model
-    return templates.TemplateResponse("thank_you.html", {"request": request, "selected": selected, "confidence": confidence})
+@app.post("/start", response_class=HTMLResponse)
+async def start(request: Request, category: str = Form(...)):
+    session_store["category"] = category
+    session_store["trial"] = 1
+    session_store["results"] = []
+    return RedirectResponse("/trial", status_code=302)
+
+@app.get("/trial", response_class=HTMLResponse)
+async def trial(request: Request):
+    if session_store.get("trial", 0) > 3:
+        return RedirectResponse("/results", status_code=302)
+
+    # Placeholder abstract for now
+    abstract = "This is a placeholder abstract from the category: " + session_store.get("category", "Unknown")
+
+    return templates.TemplateResponse("trial.html", {
+        "request": request,
+        "trial_num": session_store["trial"],
+        "abstract": abstract
+    })
+
+@app.post("/submit-trial", response_class=HTMLResponse)
+async def submit_trial(request: Request, altered: str = Form(...), confidence: int = Form(...)):
+    session_store["results"].append({
+        "trial": session_store["trial"],
+        "user_guess": altered,
+        "confidence": confidence,
+        "correct_answer": "TODO"
+    })
+    session_store["trial"] += 1
+    return RedirectResponse("/trial", status_code=302)
+
+@app.get("/results", response_class=HTMLResponse)
+async def results(request: Request):
+    return templates.TemplateResponse("results.html", {
+        "request": request,
+        "results": session_store["results"],
+        "category": session_store.get("category", "N/A")
+    })
