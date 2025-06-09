@@ -4,9 +4,9 @@
 <body>
     <h2>Results - Category: {{ category }}</h2>
     <ul>
-        {% for result in results %}
-            <li>Trial {{ result.trial }}: You said "{{ result.user_guess }}" with confidence {{ result.confidence }} — Correct: {{ result.correct_answer }}</li>
-        {% endfor %}
+    {% for r in results %}
+        <li>Trial {{ r.trial }} - You said "{{ r.user_guess }}" (Confidence: {{ r.confidence }}) → Correct: {{ r.correct_answer }} ✅ {{ '✓' if r.is_correct else '✗' }}</li>
+    {% endfor %}
     </ul>
     <a href="/">Try Again</a>
 </body>
