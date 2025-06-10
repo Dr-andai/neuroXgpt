@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head><title>Select Category</title></head>
+<head>
+    <title>BrainBench Challenge</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
 <body>
-    <h2>Select a neuroscience category to begin:</h2>
-    <form action="/start" method="post">
-        <select name="category" required>
-            <option value="behavioural_cognitive">Behavioural / Cognitive</option>
-            <option value="developmental">Developmental / Plasticity / Repair</option>
-            <option value="cellular">Cellular / Molecular</option>
-            <option value="disease">Neurobiology of Disease</option>
-            <option value="systems">Systems / Circuits</option>
-        </select>
-        <button type="submit">Start Challenge</button>
-    </form>
+    <div class="container">
+        <h1>🧠 BrainBench: Neuroscience Abstract Challenge</h1>
+        <p>Welcome! Ready to test your neuroscience instincts?</p>
+        <form action="/start" method="post">
+            <button type="submit">Start Challenge</button>
+        </form>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
 </body>
 </html>
