@@ -4,15 +4,18 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import pandas as pd
 import random
+
 import os 
+from dotenv import load_dotenv
+load_dotenv()
+
+hf_token = os.getenv("HUGGINGFACE_TOKEN")
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
 # Load dataset
-hf_token = os.getenv("HUGGINGFACE_TOKEN")
-
 df = pd.read_parquet(
     "hf://datasets/BrainGPT/BrainBench_GPT-4_v0.1.csv/data/train-00000-of-00001-1c06a67d80bbbd1d.parquet",
     storage_options={"token": hf_token}
