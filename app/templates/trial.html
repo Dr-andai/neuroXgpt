@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head><title>Trial {{ trial_num }}</title></head>
+<head>
+    <title>Trial {{ trial_num }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
 <body>
-    <h2>Trial {{ trial_num }} of 3</h2>
-    <blockquote>{{ abstract }}</blockquote>
-    <form action="/submit-trial" method="post">
-        <p>Do you think this abstract is altered?</p>
-        <label><input type="radio" name="altered" value="yes" required> Yes</label>
-        <label><input type="radio" name="altered" value="no"> No</label>
-        <br><br>
-        <label for="confidence">Confidence (1–100):</label>
-        <input type="range" name="confidence" min="1" max="100" value="50"><br><br>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="container">
+        <h2>Trial {{ trial_num }}</h2>
+        <p>{{ abstract }}</p>
+
+        <form action="/submit-trial" method="post">
+            <label>
+                <input type="radio" name="altered" value="yes" required> Yes – It’s altered
+            </label>
+            <label>
+                <input type="radio" name="altered" value="no" required> No – It’s original
+            </label>
+
+            <label for="confidence">How confident are you (1–100)?</label>
+            <input type="number" name="confidence" id="confidence" min="1" max="100" required>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 </body>
 </html>
