@@ -2,14 +2,18 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
 import pandas as pd
 import random
-
+import httpx
 import os 
+
 from dotenv import load_dotenv
 load_dotenv()
 
 hf_token = os.getenv("HUGGINGFACE_TOKEN")
+
+MODEL_API_URL = "https://andaimd-brainbench.hf.space/predict"
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -23,6 +27,7 @@ df = pd.read_parquet(
 
 session_store = {}
 
+## GET
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
@@ -64,27 +69,85 @@ async def trial(request: Request):
         "abstract": trial["abstract"]
     })
 
+# @app.post("/submit-trial", response_class=HTMLResponse)
+# async def submit_trial(request: Request, altered: str = Form(...), confidence: int = Form(...)):
+#     idx = session_store.get("trial_index", 0)
+#     trial = session_store["trials"][idx]
+#     correct = trial["correct"]
+
+#     session_store["results"].append({
+#         "trial": idx + 1,
+#         "user_guess": altered,
+#         "confidence": confidence,
+#         "correct_answer": correct,
+#         "is_correct": altered == correct,
+#         "journal_section": trial["journal_section"]
+#     })
+
+#     session_store["trial_index"] += 1
+#     return RedirectResponse("/trial", status_code=302)
+
 @app.post("/submit-trial", response_class=HTMLResponse)
 async def submit_trial(request: Request, altered: str = Form(...), confidence: int = Form(...)):
     idx = session_store.get("trial_index", 0)
     trial = session_store["trials"][idx]
     correct = trial["correct"]
 
+    # Prepare prompt
+    prompt = f"Has this abstract been modified? Abstract: {trial['abstract']}"
+
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(MODEL_API_URL, json={"input": prompt})
+            model_output = response.json().get("output", "").lower()
+            # Basic post-processing to get "yes" or "no"
+            if "yes" in model_output:
+                model_guess = "yes"
+            elif "no" in model_output:
+                model_guess = "no"
+            else:
+                model_guess = "unknown"
+    except Exception as e:
+        model_output = f"Error: {e}"
+        model_guess = "unknown"
+
+    # Store result
     session_store["results"].append({
         "trial": idx + 1,
         "user_guess": altered,
         "confidence": confidence,
         "correct_answer": correct,
         "is_correct": altered == correct,
-        "journal_section": trial["journal_section"]
+        "journal_section": trial["journal_section"],
+        "model_output": model_output,
+        "model_guess": model_guess,
+        "model_correct": model_guess == correct
     })
 
     session_store["trial_index"] += 1
-    return RedirectResponse("/trial", status_code=302)
+
+    # Redirect to /trial if more trials left, else to /results
+    if session_store["trial_index"] >= len(trial):
+        return RedirectResponse("/results", status_code=302)
+    else:
+        return RedirectResponse("/trial", status_code=302)
+
+
 
 @app.get("/results", response_class=HTMLResponse)
 async def results(request: Request):
+    results = session_store.get("results", [])
+    trials = session_store.get("trials", [])
+    
+    for idx, r in enumerate(results):
+        if idx < len(trials):
+            r["abstract"] = trials[idx]["abstract"]
+
     return templates.TemplateResponse("results.html", {
         "request": request,
-        "results": session_store["results"]
+        "results": results
     })
+
+print("Trial index:", session_store.get("trial_index", "NOT SET"))
+print("Total trials:", len(session_store.get("trials", [])))
+

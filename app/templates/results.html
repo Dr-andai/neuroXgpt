@@ -1,13 +1,64 @@
 <!DOCTYPE html>
 <html>
-<head><title>Results</title></head>
+<head>
+    <title>Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .correct { background-color: #d4edda; }
+        .wrong { background-color: #f8d7da; }
+    </style>
+</head>
 <body>
-    <h2>Results - Category: {{ category }}</h2>
-    <ul>
-    {% for r in results %}
-        <li>Trial {{ r.trial }} - You said "{{ r.user_guess }}" (Confidence: {{ r.confidence }}) → Correct: {{ r.correct_answer }} ✅ {{ '✓' if r.is_correct else '✗' }}</li>
-    {% endfor %}
-    </ul>
-    <a href="/">Try Again</a>
+    <h1>Challenge Results</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Trial</th>
+                <th>Excerpt</th>
+                <th>Your Answer</th>
+                <th>Model Answer</th>
+                <th>Correct Answer</th>
+                <th>Winner</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+                <tr class="{% if result.is_correct %}correct{% else %}wrong{% endif %}">
+                    <td>{{ result.trial }}</td>
+                    <td>{{ result.abstract[:100] }}...</td>
+                    <td>{{ result.user_guess }}</td>
+                    <td>{{ result.model_guess }}</td>
+                    <td>{{ result.correct_answer }}</td>
+                    <td>
+                        {% if result.is_correct and result.model_correct %}
+                            Both
+                        {% elif result.is_correct %}
+                            You
+                        {% elif result.model_correct %}
+                            Model
+                        {% else %}
+                            Neither
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/" style="display: block; margin-top: 1rem;">Play Again</a>
 </body>
 </html>
