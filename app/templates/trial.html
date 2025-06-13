@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trial {{ trial_num }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Trial {{ trial_num }}</h2>
+        <p>{{ abstract }}</p>
+
+        <form action="/submit-trial" method="post">
+            <label>
+                <input type="radio" name="altered" value="yes" required> Yes – It’s altered
+            </label>
+            <label>
+                <input type="radio" name="altered" value="no" required> No – It’s original
+            </label>
+
+            <label for="confidence">How confident are you (1–100)?</label>
+            <input type="number" name="confidence" id="confidence" min="1" max="100" required>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

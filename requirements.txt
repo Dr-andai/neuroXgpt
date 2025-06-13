@@ -1,7 +1,10 @@
 fastapi
 uvicorn[standard]
 jinja2
-httpx                 # for calling the Hugging Face API
-python-multipart      # needed for form submissions in FastAPI
-sqlalchemy     
-pymysql
+httpx
+pandas
+python-multipart
+sqlalchemy
+fsspec
+pyarrow
+huggingface_hub
