@@ -30,8 +30,8 @@
                 <td>{% if r.model_correct %}✅{% else %}❌{% endif %}</td>
             </tr>
             <tr>
-                <td colspan="7" style="font-size: 0.9em; color: #555; padding-bottom: 1rem;">
-                    <strong>Model Output:</strong> {{ r.model_output }}
+                <td colspan="7" style="font-size: 0.9em; color: #333; padding-bottom: 1rem;">
+                    <strong>Model Output (next 15 words):</strong> {{ r.model_output }}
                 </td>
             </tr>
             {% endfor %}

@@ -17,8 +17,9 @@
                 <input type="radio" name="altered" value="no" required> No – It’s original
             </label>
 
-            <label for="confidence">How confident are you (1–100)?</label>
-            <input type="number" name="confidence" id="confidence" min="1" max="100" required>
+            <label for="confidence">How confident are you?</label>
+            <input type="range" name="confidence" id="confidence" min="0" max="100" value="50" oninput="confVal.value = confidence.value">
+            <span id="confVal">50</span>%
 
             <input type="submit" value="Submit">
         </form>
