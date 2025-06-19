@@ -1,6 +1,6 @@
-# 🧠 BrainBench: Abstract Alteration Detection Web App
+# 🧠 neuroXgpt: Abstract Alteration Detection Web App
 
-BrainBench is a FastAPI-based web application that helps evaluate whether neuroscience abstracts have been synthetically altered. It enables both human users and an LLM (BrainGPT-7B-v0.1) to determine if an abstract is original or machine-modified.
+neuroXgpt is a FastAPI-based web application that helps evaluate whether neuroscience abstracts have been synthetically altered. It enables both human users and an LLM (BrainGPT-7B-v0.1) to determine if an abstract is original or machine-modified.
 
 ---
 
@@ -97,7 +97,7 @@ Columns:
 brainbench/
 ├── app/
 │   ├── main.py              # FastAPI app
-│   ├── model_loader.py      # GPT-2 loader (optional for future local use)
+│   ├── model_loader.py      # BrainBench_GPT loader (optional for future local use)
 │   ├── templates/           # Jinja2 HTML templates
 │   └── static/              # CSS styling
 ├── Dockerfile
