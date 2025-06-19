@@ -10,30 +10,27 @@
         <p>Here’s how you performed:</p>
 
         <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Guess</th>
-                    <th>Correct</th>
-                    <th>Confidence</th>
-                    <th>Accuracy</th>
-                </tr>
-            </thead>
-            <tbody>
+            <tr>
+                <th>#</th>
+                <th>User Guess</th>
+                <th>Correct</th>
+                <th>Confidence</th>
+                <th>User Accuracy</th>
+                <th>Model Guess</th>
+                <th>Model Accuracy</th>
+            </tr>
             {% for r in results %}
-                <tr>
-                    <td>{{ r.trial }}</td>
-                    <td>{{ r.user_guess }}</td>
-                    <td>{{ r.correct_answer }}</td>
-                    <td>{{ r.confidence }}</td>
-                    <td class="{{ 'result-correct' if r.is_correct else 'result-wrong' }}">
-                        {{ '✓' if r.is_correct else '✗' }}
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ r.trial }}</td>
+                <td>{{ r.user_guess }}</td>
+                <td>{{ r.correct_answer }}</td>
+                <td>{{ r.confidence }}</td>
+                <td>{% if r.is_correct %}✅{% else %}❌{% endif %}</td>
+                <td>{{ r.model_guess }}</td>
+                <td>{% if r.model_correct %}✅{% else %}❌{% endif %}</td>
+            </tr>
             {% endfor %}
-            </tbody>
         </table>
-
         <form action="/" method="get">
             <input type="submit" value="Try Again">
         </form>
