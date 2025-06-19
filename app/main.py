@@ -92,7 +92,7 @@ async def submit_trial(request: Request, altered: str = Form(...), confidence: i
         async with httpx.AsyncClient(timeout=45.0) as client:
             response = await client.post(MODEL_API_URL, json={"input": prompt})
             model_output = response.json().get("output", "").lower()
-            print("Model raw output:", model_output)  # Logging for debugging
+            print("Full model response:\n", response.json().get("output", ""))  # Logging for debugging
 
             # Basic post-processing to extract model decision
             if "yes" in model_output:

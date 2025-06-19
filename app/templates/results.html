@@ -1,38 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Results</title>
+    <title>BrainBench – Home</title>
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .circle {
+            width: 40px;
+            height: 40px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .flow-text {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h2>Results</h2>
-        <p>Here’s how you performed:</p>
+        <h1>🧠 Welcome to BrainBench</h1>
+        <p>This app helps compare <strong>your intuition</strong> vs a neuroscience-trained AI model.</p>
 
-        <table>
-            <tr>
-                <th>#</th>
-                <th>User Guess</th>
-                <th>Correct</th>
-                <th>Confidence</th>
-                <th>User Accuracy</th>
-                <th>Model Guess</th>
-                <th>Model Accuracy</th>
-            </tr>
-            {% for r in results %}
-            <tr>
-                <td>{{ r.trial }}</td>
-                <td>{{ r.user_guess }}</td>
-                <td>{{ r.correct_answer }}</td>
-                <td>{{ r.confidence }}</td>
-                <td>{% if r.is_correct %}✅{% else %}❌{% endif %}</td>
-                <td>{{ r.model_guess }}</td>
-                <td>{% if r.model_correct %}✅{% else %}❌{% endif %}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        <form action="/" method="get">
-            <input type="submit" value="Try Again">
+        <h3>How it works:</h3>
+
+        <div class="flow-step">
+            <div class="circle">1</div>
+            <div class="flow-text">
+                You'll read 3 neuroscience abstracts – some original, others AI-modified.
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <div class="circle">2</div>
+            <div class="flow-text">
+                For each one, guess if it’s been changed and rate how confident you feel.
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <div class="circle">3</div>
+            <div class="flow-text">
+                BrainGPT also gives its prediction. At the end, we compare your performance!
+            </div>
+        </div>
+
+        <form action="/start" method="post" style="text-align: center; margin-top: 2rem;">
+            <input type="submit" value="🚀 Start the Challenge">
         </form>
     </div>
 </body>
