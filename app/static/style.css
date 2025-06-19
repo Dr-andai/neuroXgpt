@@ -63,3 +63,40 @@ button:hover, input[type="submit"]:hover {
 .result-wrong {
   color: red;
 }
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  font-size: 0.95rem;
+}
+
+.results-table th {
+  background-color: #e9ecef;
+  color: #333;
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.results-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.results-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.results-table .center {
+  text-align: center;
+}
+
+.results-table .correct {
+  color: green;
+  font-weight: bold;
+}
+
+.results-table .wrong {
+  color: crimson;
+  font-weight: bold;
+}
