@@ -1,3 +1,12 @@
+---
+title: neuroXgpt
+emoji: 🦀
+colorFrom: gray
+colorTo: red
+sdk: docker
+pinned: false
+short_description: Battle it out with braingpt model
+---
 # 🧠 neuroXgpt: Abstract Alteration Detection Web App
 
 neuroXgpt is a FastAPI-based web application that helps evaluate whether neuroscience abstracts have been synthetically altered. It enables both human users and an LLM (BrainGPT-7B-v0.1) to determine if an abstract is original or machine-modified.
