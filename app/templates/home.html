@@ -1,63 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BrainBench – Home</title>
+    <title>neuroXgpt | Start</title>
     <link rel="stylesheet" href="/static/style.css">
-    <style>
-        .flow-step {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .circle {
-            width: 40px;
-            height: 40px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 1rem;
-        }
-
-        .flow-text {
-            flex-grow: 1;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧠 Welcome to neuroXgpt</h1>
-        <p>This app helps compare <strong>your intuition</strong> vs a neuroscience-trained AI model.</p>
+        <img src="/static/img/neuroXgpt.jpeg" alt="neuroXgpt Logo" style="max-width: 200px; display: block; margin: 0 auto 1rem;">
 
-        <h3>How it works:</h3>
+        <h1 style="text-align:center;">Welcome to neuroXgpt</h1>
+        <p style="text-align:center;">🧠 Detect. Decode. Decide.</p>
 
-        <div class="flow-step">
-            <div class="circle">1</div>
-            <div class="flow-text">
-                You'll read 3 neuroscience abstracts – some original, others AI-modified.
-            </div>
+        <div style="margin: 2rem auto;">
+            <h3>🧪 What to Expect</h3>
+            <ol>
+                <li>You'll be shown 3 neuroscience abstracts — some may be AI-altered.</li>
+                <li>Your task is to detect if they're modified or original.</li>
+                <li>You rate your confidence.</li>
+                <li>GPT-2 also analyzes the same abstract.</li>
+                <li>In the end, you’ll see how your guesses compare to the model’s continuation-based output.</li>
+            </ol>
         </div>
 
-        <div class="flow-step">
-            <div class="circle">2</div>
-            <div class="flow-text">
-                For each one, guess if it’s been changed and rate how confident you feel.
-            </div>
-        </div>
-
-        <div class="flow-step">
-            <div class="circle">3</div>
-            <div class="flow-text">
-                BrainGPT also gives its prediction. At the end, we compare your performance!
-            </div>
-        </div>
-
-        <form action="/start" method="post" style="text-align: center; margin-top: 2rem;">
-            <input type="submit" value="🚀 Start the Challenge">
+        <form action="/start" method="post" style="text-align: center;">
+            <button type="submit">Start</button>
         </form>
     </div>
 </body>
