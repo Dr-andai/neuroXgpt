@@ -1,6 +1,6 @@
-# 🧠 BrainBench: Abstract Alteration Detection Web App
+# 🧠 neuroXgpt: Abstract Alteration Detection Web App
 
-BrainBench is a FastAPI-based web application that helps evaluate whether neuroscience abstracts have been synthetically altered. It enables both human users and an LLM (GPT-2) to determine if an abstract is original or machine-modified.
+neuroXgpt is a FastAPI-based web application that helps evaluate whether neuroscience abstracts have been synthetically altered. It enables both human users and an LLM (BrainGPT-7B-v0.1) to determine if an abstract is original or machine-modified.
 
 ---
 
@@ -8,7 +8,7 @@ BrainBench is a FastAPI-based web application that helps evaluate whether neuros
 
 - Users are shown a series of neuroscience abstracts.
 - For each one, they decide whether the abstract has been altered.
-- GPT-2 also gives its prediction via a model hosted on Hugging Face Spaces.
+- BrainGPT/BrainGPT-7B-v0.1 also gives its prediction via a model hosted on Hugging Face Spaces.
 - After 3 trials, results are shown with side-by-side comparisons.
 
 ---
@@ -17,7 +17,7 @@ BrainBench is a FastAPI-based web application that helps evaluate whether neuros
 
 - **FastAPI** – Backend server
 - **Jinja2** – HTML templating
-- **Hugging Face Transformers** – GPT-2 model for predictions
+- **Hugging Face Transformers** – BrainGPT/BrainGPT-7B-v0.1 model for predictions
 - **Hugging Face Spaces** – Hosting the LLM endpoint
 - **Docker** – Containerization for deployment
 
@@ -52,10 +52,10 @@ Then go to `http://127.0.0.1:8000`
 
 ## 🌐 Remote Model Endpoint
 
-This app sends input to a Hugging Face Spaces endpoint that runs GPT-2:
+This app sends input to a Hugging Face Spaces endpoint that runs BrainGPT/BrainGPT-7B-v0.1:
 
 ```
-https://andaimd-brainbench.hf.space/predict
+https://andaimd-brainbench_braingpt.hf.space/predict
 ```
 
 ### Request Format (JSON)
@@ -97,7 +97,7 @@ Columns:
 brainbench/
 ├── app/
 │   ├── main.py              # FastAPI app
-│   ├── model_loader.py      # GPT-2 loader (optional for future local use)
+│   ├── model_loader.py      # BrainBench_GPT loader (optional for future local use)
 │   ├── templates/           # Jinja2 HTML templates
 │   └── static/              # CSS styling
 ├── Dockerfile
@@ -110,7 +110,7 @@ brainbench/
 ## 🧑‍🔬 Authors
 
 - **David Andai, MD** – Project lead, research design
-- GPT-2 (🤖) – Automated prediction
+- BrainGPT-7B-v0.1 (🤖) – Automated prediction
 
 ---
 
