@@ -29,8 +29,14 @@
                 <td>{{ r.model_guess }}</td>
                 <td>{% if r.model_correct %}✅{% else %}❌{% endif %}</td>
             </tr>
+            <tr>
+                <td colspan="7" style="font-size: 0.9em; color: #333; padding-bottom: 1rem;">
+                    <span class="model-output"><strong>🧠 Insight in Abstract:</strong> {{ r.model_output }}</span>
+                </td>
+            </tr>
             {% endfor %}
         </table>
+
         <form action="/" method="get">
             <input type="submit" value="Try Again">
         </form>

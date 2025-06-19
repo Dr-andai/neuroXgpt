@@ -100,3 +100,12 @@ button:hover, input[type="submit"]:hover {
   color: crimson;
   font-weight: bold;
 }
+.model-output {
+  font-style: italic;
+  color: #444;
+  padding-left: 1rem;
+  display: block;
+  margin-top: 0.3rem;
+  margin-bottom: 1.5rem;
+}
+

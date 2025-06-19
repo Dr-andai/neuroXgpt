@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>neuroXgpt Challenge</title>
+    <title>neuroXgpt | Start</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>🧠 neuroXgpt: Neuroscience Abstract Challenge</h1>
-        <p>Welcome! Ready to test your neuroscience instincts?</p>
-        <form action="/start" method="post">
-            <button type="submit">Start Challenge</button>
+        <img src="/static/img/neuroXgpt.jpeg" alt="neuroXgpt Logo" style="max-width: 200px; display: block; margin: 0 auto 1rem;">
+
+        <h1 style="text-align:center;">Welcome to neuroXgpt</h1>
+        <p style="text-align:center;">🧠 Detect. Decode. Decide.</p>
+
+        <div style="margin: 2rem auto;">
+            <h3>🧪 What to Expect</h3>
+            <ol>
+                <li>You'll be shown 3 neuroscience abstracts — some may be AI-altered.</li>
+                <li>Your task is to detect if they're modified or original.</li>
+                <li>You rate your confidence.</li>
+                <li>GPT-2 also analyzes the same abstract.</li>
+                <li>In the end, you’ll see how your guesses compare to the model’s continuation-based output.</li>
+            </ol>
+        </div>
+
+        <form action="/start" method="post" style="text-align: center;">
+            <button type="submit">Start</button>
         </form>
-        {% if error %}
-        <p class="error">{{ error }}</p>
-        {% endif %}
     </div>
 </body>
 </html>

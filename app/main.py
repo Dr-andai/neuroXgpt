@@ -13,9 +13,8 @@ load_dotenv()
 
 hf_token = os.getenv("HUGGINGFACE_TOKEN")
 
-MODEL_API_URL = "https://andaimd-braingpt-implement.hf.space/predict"
-#"https://andaimd-brainbench.hf.space/predict"
-
+MODEL_API_URL = "https://andaimd-brainbench.hf.space/predict"
+#https://andaimd-braingpt-implement.hf.space/predict
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
@@ -91,8 +90,10 @@ async def submit_trial(request: Request, altered: str = Form(...), confidence: i
     try:
         async with httpx.AsyncClient(timeout=45.0) as client:
             response = await client.post(MODEL_API_URL, json={"input": prompt})
-            model_output = response.json().get("output", "").lower()
-            print("Model raw output:", model_output)  # Logging for debugging
+            response_data = response.json()
+            model_output = response_data.get("output", "").strip()
+
+            print("Full model response:\n", response.json().get("output", ""))  # Logging for debugging
 
             # Basic post-processing to extract model decision
             if "yes" in model_output:
