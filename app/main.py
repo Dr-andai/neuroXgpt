@@ -13,7 +13,7 @@ load_dotenv()
 
 hf_token = os.getenv("HUGGINGFACE_TOKEN")
 
-MODEL_API_URL = "https://andaimd-brainbench_braingpt.hf.space/predict"
+MODEL_API_URL = "https://andaimd-braingpt-implement.hf.space/predict"
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
